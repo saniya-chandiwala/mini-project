@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>project</title>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'WebApp/style.css' %}">
+</head>
+<body>
+    <div class="wrapper">
+        <div class="main-content">
+            <div class="image-upload-area">
+                <center>
+                    <h4 style="width: 100%;">A food image to recipe converter for Indian Food</h4>
+                </center>
+                <div class="uploaded-image-display">
+                    <img id="up-image" src="data:image/png;base64,{{uploaded_image}}">
+                </div>
+                <div class="image_form">
+                    <form method="post" enctype="multipart/form-data" style="width: 100%;">
+                        {% csrf_token %}
+                        <label class="upload_button">
+                            Upload Image
+                            <input type="file" name="image" accept="image/*" id="id_image"
+                                   onchange="document.getElementById('up-image').src = window.URL.createObjectURL(this.files[0])">
+                        </label><br><br>
+                        <button class="process_button" type="submit">Convert</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="results-display-area">
+                {% if recipe_list_to_return %}
+                    <center>
+                        <h3>Here are some possible matches,</h3>
+                    </center>
+                    {% for x in recipe_list_to_return %}
+                    <div class="recipe-card">
+                        <div class="first_section">
+                            <h2 class="recipe_name">{{ x.0 }}</h2>
+                            <h4 class="recipe_name">Cooking Time: {{ x.2 }}</h4>
+                        </div>
+                        <div class="second_section">
+                            <h3 style="padding-inline: 5px;">Ingredients</h3>
+                            <p class="ing_dir_display_area">{{ x.3 }}</p>
+                        </div>
+                        <div class="third_section">
+                            <h3 style="padding-inline: 5px;">Directions</h3>
+                            <p class="ing_dir_display_area">{{ x.4 }}</p>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</body>
+</html>
